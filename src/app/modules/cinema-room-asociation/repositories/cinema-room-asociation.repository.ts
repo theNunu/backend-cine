@@ -89,4 +89,9 @@ export class CinemaRoomAsociationRepository implements GenericRepository<CinemaR
         }
     }
 // ...existing code...
+
+
+
+
+
 }

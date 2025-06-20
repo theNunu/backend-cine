@@ -1,4 +1,4 @@
-import { Cinema, PrismaClient } from "@prisma/client";
+import { Cinema, Prisma, PrismaClient } from "@prisma/client";
 import { GenericRepository } from "../../../shared/interfaces/generic-repository.inerface";
 import { prisma } from "../../../core/config/prisma.config";
 
@@ -8,11 +8,19 @@ export class CinemaRepository implements GenericRepository<Cinema, number> {
         this.prisma = prisma
     }
 
-    async findAll(): Promise<Cinema[]> {
+
+
+
+    async findAll(name?: string): Promise<Cinema[]> {
         try {
             const cinemas: Cinema[] = await this.prisma.cinema.findMany({
                 where: {
-                    state: 1
+                    state: 1,
+                    ...(name && {
+                        name: {
+                            contains: name
+                        }
+                    })
                 }
             })
             return cinemas
@@ -66,7 +74,7 @@ export class CinemaRepository implements GenericRepository<Cinema, number> {
         }
     }
 
-// ...existing code...
+    // ...existing code...
     async delete(id: number): Promise<boolean> {
         try {
             await this.prisma.cinema.update({
@@ -84,5 +92,26 @@ export class CinemaRepository implements GenericRepository<Cinema, number> {
             return false
         }
     }
-// ...existing code...
+    // ...existing code...
+
+
+    async findByName(name: string): Promise<Cinema[]> {
+        try {
+            const cinemas: Cinema[] = await this.prisma.cinema.findMany({
+                where: {
+                    name: {
+                        contains: name,
+                    },
+                    state: 1
+                }
+            });
+            console.log('peliculas encontradaspor el nombre', cinemas)
+            return cinemas
+        } catch (error) {
+            console.error("error al encontrar el nombre de la pelicula: ", error)
+            return []
+
+        }
+
+    }
 }

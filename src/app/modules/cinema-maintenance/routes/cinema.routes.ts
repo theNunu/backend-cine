@@ -11,6 +11,8 @@ import { CinemaController } from "../controllers/cinema.controller";
 const cinemaRouter = Router();
 const cinemaController = new CinemaController();
 
+
+cinemaRouter.get('/search/:name',cinemaController.getCinemasByName);
 /**
  * @swagger
  * /cinemas:

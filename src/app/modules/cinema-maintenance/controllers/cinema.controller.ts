@@ -38,4 +38,11 @@ export class CinemaController {
         const result = await this.cinemaService.deleteCinema(id);
         res.status(result.code).json(result);
     };
+
+    getCinemasByName = async (req: Request, res: Response): Promise<void> => {
+        const name = req.params.name;
+        const result = await this.cinemaService.getCinemaByName(name);
+        res.status(result.code).json(result);
+    }
+
 }

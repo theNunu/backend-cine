@@ -4,10 +4,12 @@ import { BaseResponseI } from "../../../shared/interfaces/base.response";
 
 export class CinemaService {
     private readonly CinemaRepository !: CinemaRepository
-            olpk
+
     constructor() {
         this.CinemaRepository = new CinemaRepository();
     }
+
+
 
     async getAllCinemas(): Promise<BaseResponseI<Cinema[]>> {
         try {
@@ -34,7 +36,7 @@ export class CinemaService {
             if (!cinemas) {
                 return {
                     code: 404,
-                    message: "la pelicula  existe",
+                    message: "la pelicula  no existe",
                     data: null
                 }
             }
@@ -46,7 +48,7 @@ export class CinemaService {
             }
 
         } catch (error) {
-            console.error("no se puedo guardar la pelicula: ", error)
+            console.error("no se puedo encontrar la pelicula: ", error)
             return {
                 code: 500,
                 message: "Error fetching pelicula by id" + error,
@@ -154,5 +156,29 @@ export class CinemaService {
 
     }
 
+    async getCinemaByName(name: string): Promise<BaseResponseI<Cinema[]>> {
+        try {
+            const foundCinema: Cinema[] = await this.CinemaRepository.findByName(name)
 
+            if(!foundCinema){
+                return {
+                    code: 404,
+                    message: 'no se encontro ese nombre de pelicula',
+                    data: null
+                }
+            }
+            return {
+                code: 200,
+                message: "Cinema name fetched successfully",
+                data: foundCinema
+            }
+        } catch (error) {
+            console.error("error en la busqueda de peliculas", error)
+            return {
+                code: 500,
+                message: "Error en busqueda de peliculas" + error,
+                data: null
+            }
+        }
+    }
 }
