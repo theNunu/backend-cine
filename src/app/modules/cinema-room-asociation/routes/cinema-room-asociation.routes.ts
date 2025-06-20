@@ -124,4 +124,6 @@ cinemaRoomAsociationRouter.put('/:id', cinemaRoomAsociationController.updateCine
  */
 cinemaRoomAsociationRouter.delete('/:id', cinemaRoomAsociationController.deleteCinemaRoom);
 
+cinemaRoomAsociationRouter.get("/room-status/:name", cinemaRoomAsociationController.searchRoomStatus);
+
 export default cinemaRoomAsociationRouter;

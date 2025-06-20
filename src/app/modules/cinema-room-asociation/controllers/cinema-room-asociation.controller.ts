@@ -5,7 +5,7 @@ import { CinemaRoomAsociationService } from "../services/cinema-room-asociation.
 
 
 export class CinemaRoomAsociationController {
-    private readonly cinemaRoomAsociationService : CinemaRoomAsociationService;
+    private readonly cinemaRoomAsociationService: CinemaRoomAsociationService;
 
     constructor() {
         this.cinemaRoomAsociationService = new CinemaRoomAsociationService();
@@ -40,4 +40,18 @@ export class CinemaRoomAsociationController {
         const result = await this.cinemaRoomAsociationService.deleteCinemaRoom(id);
         res.status(result.code).json(result);
     };
+
+    searchRoomStatus = async (req: Request, res: Response): Promise<void> => {
+        const { name } = req.params;
+
+        if (!name) {
+            res.status(400).json({ code: 400, message: "Debe proporcionar el nombre de la sala.", data: null });
+            return;
+        }
+
+        const result = await this.cinemaRoomAsociationService.getRoomStatus(name);
+        
+        res.status(result.code).json(result);
+    }
+
 }

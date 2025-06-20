@@ -1,4 +1,4 @@
-import {  CinemaRoom, PrismaClient } from "@prisma/client";
+import { CinemaRoom, PrismaClient } from "@prisma/client";
 import { GenericRepository } from "../../../shared/interfaces/generic-repository.inerface";
 import { prisma } from "../../../core/config/prisma.config";
 
@@ -70,7 +70,7 @@ export class CinemaRoomAsociationRepository implements GenericRepository<CinemaR
         }
     }
 
-// ...existing code...
+    // ...existing code...
     async delete(id: number): Promise<boolean> {
         try {
             await this.prisma.cinemaRoom.update({
@@ -88,10 +88,35 @@ export class CinemaRoomAsociationRepository implements GenericRepository<CinemaR
             return false
         }
     }
-// ...existing code...
+    // ...existing code...
+    async searchRoomStatusByName(roomName: string): Promise<string> {
+        try {
+            // Buscar la sala por nombre y contar cuántas películas están asignadas a ella
+            const room = await this.prisma.room.findFirst({
+                where: { name: roomName },
+                include: {
+                    cinemaRooms: {
+                        where: { state: 1 },
+                        include: { cinema: true }
+                    }
+                }
+            });
 
+            if (!room) return "Sala no encontrada";
 
+            const movieCount = room.cinemaRooms.length;
 
-
+            if (movieCount < 3) {
+                return "Sala disponible";
+            } else if (movieCount <= 5) {
+                return `Sala con ${movieCount} películas asignadas`;
+            } else {
+                return "Sala no disponible";
+            }
+        } catch (error) {
+            console.error("Error en RoomSearchRepository:", error);
+            return "Error al buscar la sala";
+        }
+    }
 
 }

@@ -201,5 +201,24 @@ export class CinemaRoomAsociationService {
 
     }
 
+     async getRoomStatus(roomName: string): Promise<BaseResponseI<string>> {
+        try {
+            const message = await this.CinemaRoomAsociationRepository.searchRoomStatusByName(roomName);
+
+            return {
+                code: 200,
+                message: "Consulta exitosa",
+                data: message
+            };
+        } catch (error) {
+            return {
+                code: 500,
+                message: "Error al obtener el estado de la sala" + error,
+                data: null
+            };
+        }
+    }
+
+
 
 }
